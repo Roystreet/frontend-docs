@@ -1,8 +1,24 @@
-# React + Vite
+# Document Nexos - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este repositorio contiene el código fuente del frontend del proyecto **Document Nexos**.
 
-Currently, two official plugins are available:
+## Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Document Nexos es una aplicación diseñada para gestionar y organizar documentos de manera eficiente. El frontend de esta aplicación está desarrollado utilizando tecnologías modernas para proporcionar una experiencia de usuario intuitiva y rápida.
+
+## Tecnologías Utilizadas
+
+- **React**: Biblioteca de JavaScript para construir interfaces de usuario.
+- **Tailwind CSS**: Framework de CSS para un diseño rápido y responsivo.
+- **Axios**: Cliente HTTP para realizar solicitudes a la API backend.
+- **React Router**: Librería para manejar la navegación en la aplicación.
+
+## Instalación
+
+Para ejecutar este proyecto localmente, sigue estos pasos:
+
+1. Clona este repositorio:
+   ```sh
+   git clone https://github.com/tu-usuario/document-nexos-frontend.git
+
+   
