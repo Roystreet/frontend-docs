@@ -1,15 +1,19 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router } from 'react-router-dom';
+import Sidebar from './components/sidebar'
+import MainContent from './components/main-content'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      
+      <Router>
+      <div className="flex h-screen bg-gray-100">
+        <Sidebar />
+        <MainContent />
+      </div>
+    </Router>
     </>
   )
 }
