@@ -8,6 +8,7 @@ import Analysis from './pages/analytics'
 import Users from './pages/users'
 import Settings from './pages/settings'
 import Login from './pages/login'
+import ChatTest from './pages/chat-test'
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="analysis" element={<Analysis />} />
             <Route path="users" element={<Users />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="chat/:documentId" element={<ChatTest />} />
             <Route path="*" element={<Navigate to="/documents" replace />} />
           </Route>
         ) : (

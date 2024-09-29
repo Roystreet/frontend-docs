@@ -1,5 +1,5 @@
 import { useLocation, Link } from 'react-router-dom'
-import { Upload, FileText, Settings, Users, BarChart} from 'lucide-react'
+import { Upload, FileText, Settings, Users, BarChart, ChartBarIcon} from 'lucide-react'
 
 const Sidebar = () => {
     const location = useLocation()
@@ -9,6 +9,7 @@ const Sidebar = () => {
         { icon: <BarChart size={24} />, label: 'Análisis', path: '/analysis' },
         { icon: <Users size={24} />, label: 'Usuarios', path: '/users' },
         { icon: <Settings size={24} />, label: 'Configuración', path: '/settings' },
+        { icon: <ChartBarIcon size={24} />, label: 'Chat', path: '/chat' },
     ]
 
     return (
