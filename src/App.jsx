@@ -11,6 +11,8 @@ import Settings from './pages/settings'
 import Login from './pages/login'
 import ChatTest from './pages/chat-test'
 import ConfigCompany from './pages/config-company'
+import CreateCompany from './pages/create-company'
+import UsersCompany from './pages/user-company'
 
 
 function App() {
@@ -46,6 +48,8 @@ function App() {
         {user && isAdmin && (
           <Route path="/" element={<AuthenticatedLayoutAdmin />}>
             <Route path="admin" element={<ConfigCompany />} />
+            <Route path="admin/create" element={<CreateCompany />} />
+            <Route path="admin/users" element={<UsersCompany />} />
           </Route>
         )}
       </Routes>

@@ -20,6 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { useNavigate } from 'react-router-dom'
 
 // Datos de ejemplo para las empresas
 const companiesData = [
@@ -31,10 +32,11 @@ const companiesData = [
 export default function CompaniesView() {
   const [companies, setCompanies] = useState(companiesData)
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
   const handleAddCompany = () => {
-    // Lógica para agregar una nueva empresa
-    console.log('Agregar nueva empresa')
+    navigate('/admin/create')
+    
   }
 
   const handleAddUsers = (companyId) => {
