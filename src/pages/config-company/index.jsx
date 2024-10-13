@@ -41,7 +41,7 @@ export default function CompaniesView() {
 
   const handleAddUsers = (companyId) => {
     // Lógica para agregar usuarios a una empresa
-    console.log('Agregar usuarios a la empresa', companyId)
+    navigate(`/admin/users`)
   }
 
   const handleConfigureCompany = (companyId) => {
@@ -59,8 +59,8 @@ export default function CompaniesView() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Empresas</CardTitle>
-          <Button onClick={handleAddCompany}>
-            <Plus className="mr-2 h-4 w-4" /> Agregar Nueva Empresa
+          <Button onClick={handleAddCompany} classNam="cursor-pointer">
+            <Plus className="mr-2 h-4 w-4 cursor-pointer" /> Agregar Nueva Empresa
           </Button>
         </CardHeader>
         <CardContent>
@@ -104,11 +104,11 @@ export default function CompaniesView() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleAddUsers(company.id)}>
+                        <DropdownMenuItem onClick={() => handleAddUsers(company.id)} className="cursor-pointer">
                           <Users className="mr-2 h-4 w-4" />
                           <span>Agregar Usuarios</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleConfigureCompany(company.id)}>
+                        <DropdownMenuItem onClick={() => handleConfigureCompany(company.id)} className="cursor-pointer">
                           <Settings className="mr-2 h-4 w-4" />
                           <span>Configurar Empresa</span>
                         </DropdownMenuItem>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Plus, Edit, Key, MoreHorizontal } from 'lucide-react'
+import { Plus, Edit, Key, MoreHorizontal, ArrowLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -54,6 +55,7 @@ export default function UsersView() {
   const [editingUser, setEditingUser] = useState(null)
   const [newPassword, setNewPassword] = useState({ password: '', confirmPassword: '' })
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const handleAddUser = () => {
     if (!newUser.firstName || !newUser.lastName || !newUser.email || !newUser.role || !newUser.password) {
@@ -126,8 +128,19 @@ export default function UsersView() {
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const handleGoBack = () => {
+    navigate(-1) // This will take the user back to the previous page
+  }
+
   return (
     <div className="container mx-auto py-10">
+      <Button 
+        variant="outline" 
+        onClick={handleGoBack} 
+        className="mb-4"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" /> Volver
+      </Button>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Usuarios</CardTitle>
@@ -355,7 +368,7 @@ export default function UsersView() {
               Ingrese la nueva contraseña para el usuario.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div  className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="new-password" className="text-right">
                 Nueva Contraseña

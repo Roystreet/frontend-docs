@@ -1,4 +1,7 @@
+import React from 'react'
 import { File, CheckCircle, XCircle } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 const Documents = () => {
   const documents = [
@@ -8,24 +11,32 @@ const Documents = () => {
   ]
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Documentos Subidos</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {documents.map((file, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between">
-            <div className="flex items-center">
-              <File size={24} className="text-blue-500 mr-2" />
-              <span className="text-gray-700">{file.name}</span>
-            </div>
-            {file.active ? (
-              <CheckCircle size={24} className="text-green-500" />
-            ) : (
-              <XCircle size={24} className="text-red-500" />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>)
+    <Card className="w-full mt-2">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Documentos Subidos</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {documents.map((file, index) => (
+            <Card key={index} className="flex items-center justify-between p-4">
+              <div className="flex items-center space-x-2">
+                <File className="h-6 w-6 text-primary" />
+                <span className="text-sm font-medium">{file.name}</span>
+              </div>
+              <Badge variant={file.active ? "success" : "destructive"}>
+                {file.active ? (
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                ) : (
+                  <XCircle className="h-4 w-4 mr-1" />
+                )}
+                {file.active ? 'Activo' : 'Inactivo'}
+              </Badge>
+            </Card>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
-export default Documents;
+export default Documents

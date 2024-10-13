@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "../../hooks/use-toast"
 
 export default function LoginPage({ onLogin }) {
     const [isLoading, setIsLoading] = useState(false)
@@ -8,6 +13,7 @@ export default function LoginPage({ onLogin }) {
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
     const [isFormValid, setIsFormValid] = useState(false)
+    const { toast } = useToast()
 
     const validateEmail = (email) => {
         const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -44,75 +50,71 @@ export default function LoginPage({ onLogin }) {
             onLogin({ email })
             // Aquí iría la lógica real de login
             console.log('Login attempt with:', { email, password })
+            toast({
+                title: "Inicio de sesión exitoso",
+                description: "Bienvenido de vuelta!",
+            })
         }
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-                <div className="flex justify-center mb-8">
-                    <div className="w-32 h-32 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-4xl font-bold text-white">LOGO</span>
+        <div className="min-h-screen bg-gradient-to-br from-primary to-primary-foreground flex items-center justify-center p-4">
+            <Card className="w-full max-w-md">
+                <CardHeader className="space-y-1">
+                    <div className="flex justify-center mb-8">
+                        <div className="w-32 h-32 bg-gradient-to-r from-primary to-primary-foreground rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-4xl font-bold text-background">LOGO</span>
+                        </div>
                     </div>
-                </div>
-                <h2 className="text-2xl font-bold text-center text-gray-700 mb-8">Iniciar Sesión</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
-                            Correo Electrónico
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${emailError ? 'border-red-500' : ''
-                                }`}
-                            placeholder="ejemplo@correo.com"
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value)
-                                validateEmail(e.target.value)
-                            }}
-                            onBlur={() => validateEmail(email)}
-                            required
-                        />
-                        {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
-                            Contraseña
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${passwordError ? 'border-red-500' : ''
-                                }`}
-                            placeholder="******************"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value)
-                                validatePassword(e.target.value)
-                            }}
-                            onBlur={() => validatePassword(password)}
-                            required
-                        />
-                        {passwordError && <p className="text-red-500 text-xs italic">{passwordError}</p>}
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <button
-                            className={`bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${isFormValid && !isLoading ? 'hover:bg-blue-700' : 'opacity-50 cursor-not-allowed'
-                                }`}
+                    <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Correo Electrónico</Label>
+                            <Input
+                                type="email"
+                                id="email"
+                                placeholder="ejemplo@correo.com"
+                                value={email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value)
+                                    validateEmail(e.target.value)
+                                }}
+                                onBlur={() => validateEmail(email)}
+                                required
+                            />
+                            {emailError && <p className="text-destructive text-sm">{emailError}</p>}
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Contraseña</Label>
+                            <Input
+                                type="password"
+                                id="password"
+                                placeholder="******************"
+                                value={password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value)
+                                    validatePassword(e.target.value)
+                                }}
+                                onBlur={() => validatePassword(password)}
+                                required
+                            />
+                            {passwordError && <p className="text-destructive text-sm">{passwordError}</p>}
+                        </div>
+                        <Button
+                            className="w-full"
                             type="submit"
                             disabled={!isFormValid || isLoading}
                         >
                             {isLoading ? (
-                                <Loader2 className="animate-spin mx-auto" />
-                            ) : (
-                                'Iniciar Sesión'
-                            )}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : null}
+                            Iniciar Sesión
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     )
 }

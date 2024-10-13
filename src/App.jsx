@@ -17,7 +17,7 @@ import UsersCompany from './pages/user-company'
 
 function App() {
 
-  const [user, setUser] = useState(true)
+  const [user, setUser] = useState(false)
   const [isAdmin, setIsAdmin] = useState(true)
 
   const handleLogin = (userData) => {
