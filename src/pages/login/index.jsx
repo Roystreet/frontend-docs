@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "../../hooks/use-toast"
+import apiRequest from "../../helper/api"// Asegúrate de importar la función apiRequest
 
 export default function LoginPage({ onLogin }) {
     const [isLoading, setIsLoading] = useState(false)
@@ -44,16 +45,37 @@ export default function LoginPage({ onLogin }) {
         e.preventDefault()
         if (isFormValid) {
             setIsLoading(true)
-            // Simular una llamada a la API
-            await new Promise(resolve => setTimeout(resolve, 2000))
-            setIsLoading(false)
-            onLogin({ email })
-            // Aquí iría la lógica real de login
-            console.log('Login attempt with:', { email, password })
-            toast({
-                title: "Inicio de sesión exitoso",
-                description: "Bienvenido de vuelta!",
-            })
+            try {
+                // Realizar solicitud a la API de login
+                const response = await apiRequest('/users/login', 'POST', { email, password })
+                if (response.token) {
+                    localStorage.setItem('authToken', response.token)
+                    localStorage.setItem('userData', JSON.stringify(response.data)) // Guardar datos de usuario
+                    toast({
+                        title: "Inicio de sesión exitoso",
+                        description: "Bienvenido de vuelta!",
+                    })
+
+                    onLogin(response.data)
+
+                } else {
+                    toast({
+                        title: "Error de autenticación",
+                        description: "Email o contraseña incorrectos.",
+                        variant: "destructive",
+                    })
+                }
+
+            } catch (error) {
+                toast({
+                    title: "Error",
+                    description: error.error,
+                    variant: "destructive",
+                })
+                console.error('Error al iniciar sesión:', error)
+            } finally {
+                setIsLoading(false)
+            }
         }
     }
 

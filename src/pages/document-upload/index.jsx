@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 
 export default function DocumentUpload() {
   const [uploading, setUploading] = useState(false)
+  const {companyId} = localStorage.getItem('userData')? JSON.parse(localStorage.getItem('userData')) : null
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
@@ -25,7 +26,7 @@ export default function DocumentUpload() {
       try {
         const response = await fetch('http://localhost:5000/api/documents/upload', {
           method: 'POST',
-          body: formData,
+          body: {...formData, companyId},
         })
 
         if (response.ok) {

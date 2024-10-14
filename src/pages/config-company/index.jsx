@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, Users, Settings, MoreHorizontal } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
@@ -21,37 +21,46 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from 'react-router-dom'
-
-// Datos de ejemplo para las empresas
-const companiesData = [
-  { id: 1, name: 'Empresa A', adminEmail: 'admin@empresaa.com', isActive: true },
-  { id: 2, name: 'Empresa B', adminEmail: 'admin@empresab.com', isActive: false },
-  { id: 3, name: 'Empresa C', adminEmail: 'admin@empresac.com', isActive: true },
-]
+import  ApiRequest  from "../../helper/api"
 
 export default function CompaniesView() {
-  const [companies, setCompanies] = useState(companiesData)
+  const [companies, setCompanies] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const navigate = useNavigate()
 
+  // Obtener los datos de las empresas al cargar el componente
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await ApiRequest('/companies', 'GET')
+        if (response.success) {
+          setCompanies(response.data) // Actualizar el estado con los datos obtenidos
+        } else {
+          console.error('Error al obtener empresas:', response.message)
+        }
+      } catch (error) {
+        console.error('Error en la solicitud:', error)
+      }
+    }
+
+    fetchCompanies()
+  }, [])
+
   const handleAddCompany = () => {
     navigate('/admin/create')
-    
   }
 
   const handleAddUsers = (companyId) => {
-    // Lógica para agregar usuarios a una empresa
-    navigate(`/admin/users`)
+    navigate(`/admin/${companyId}/users`)
   }
 
   const handleConfigureCompany = (companyId) => {
-    // Lógica para configurar una empresa
     console.log('Configurar empresa', companyId)
   }
 
   const filteredCompanies = companies.filter(company =>
     company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    company.adminEmail.toLowerCase().includes(searchTerm.toLowerCase())
+    company.adminEmail?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -59,7 +68,7 @@ export default function CompaniesView() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Empresas</CardTitle>
-          <Button onClick={handleAddCompany} classNam="cursor-pointer">
+          <Button onClick={handleAddCompany} className="cursor-pointer">
             <Plus className="mr-2 h-4 w-4 cursor-pointer" /> Agregar Nueva Empresa
           </Button>
         </CardHeader>
@@ -77,7 +86,7 @@ export default function CompaniesView() {
               <TableRow>
                 <TableHead className="w-[100px]">ID</TableHead>
                 <TableHead>Nombre de la Empresa</TableHead>
-                <TableHead>Correo Administrador</TableHead>
+                <TableHead>Numero de contacto</TableHead>
                 <TableHead>Estado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
@@ -87,10 +96,10 @@ export default function CompaniesView() {
                 <TableRow key={company.id}>
                   <TableCell className="font-medium">{company.id}</TableCell>
                   <TableCell>{company.name}</TableCell>
-                  <TableCell>{company.adminEmail}</TableCell>
+                  <TableCell>{company.phone}</TableCell>
                   <TableCell>
-                    <Badge variant={company.isActive ? "success" : "destructive"}>
-                      {company.isActive ? "Activa" : "Inactiva"}
+                    <Badge variant={company.active ? "success" : "destructive"}>
+                      {company.active ? "Activa" : "Inactiva"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">

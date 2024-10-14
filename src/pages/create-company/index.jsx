@@ -32,9 +32,19 @@ export default function CreateCompany() {
     setIsLoading(true)
 
     try {
-      // Aquí iría la lógica para enviar los datos al backend
-      // Por ahora, simularemos una llamada API con un timeout
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const response = await fetch('http://localhost:5000/api/companies/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al crear la empresa')
+      }
+
+      const data = await response.json()
 
       toast({
         title: "Empresa creada con éxito",
