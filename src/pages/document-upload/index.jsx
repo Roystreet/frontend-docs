@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "../../hooks/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useNavigate } from 'react-router-dom'
 
 export default function DocumentUpload() {
+  const navigate = useNavigate()
   const [uploading, setUploading] = useState(false)
   const {companyId} = localStorage.getItem('userData')? JSON.parse(localStorage.getItem('userData')) : null
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -22,11 +24,12 @@ export default function DocumentUpload() {
       const file = files[i]
       const formData = new FormData()
       formData.append('file', file)
+      formData.append('companyId', companyId)  
 
       try {
         const response = await fetch('http://localhost:5000/api/documents/upload', {
           method: 'POST',
-          body: {...formData, companyId},
+          body: formData,
         })
 
         if (response.ok) {
@@ -60,6 +63,10 @@ export default function DocumentUpload() {
     setShowConfirmDialog(true)
   }
 
+  const handleFinishUpload = () => {
+    setShowConfirmDialog(false)
+    navigate('/files')
+  }
   const resetUpload = () => {
     setUploadedFiles([])
     setUploadProgress(0)
@@ -124,7 +131,7 @@ export default function DocumentUpload() {
           </DialogHeader>
           <DialogFooter>
             <Button onClick={resetUpload} variant="outline">Sí, subir más</Button>
-            <Button onClick={() => setShowConfirmDialog(false)}>No, terminar</Button>
+            <Button onClick={handleFinishUpload}>No, terminar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

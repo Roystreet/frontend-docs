@@ -14,6 +14,7 @@ import ChatTest from './pages/chat-test'
 import ConfigCompany from './pages/config-company'
 import CreateCompany from './pages/create-company'
 import UsersCompany from './pages/user-company'
+import KnowledgeBaseExplorer from './pages/public/knowledge'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -74,17 +75,18 @@ function App() {
               <Route path="*" element={<Navigate to="/documents" replace />} />
             </Route>
 
-            {isAdmin && (
+            
               <Route path="/" element={<AuthenticatedLayoutAdmin onLogout={handleLogout} />}>
                 <Route path="admin" element={<ConfigCompany />} />
                 <Route path="admin/create" element={<CreateCompany />} />
                 <Route path="admin/:companyId/users" element={<UsersCompany />} />
               </Route>
-            )}
+            
           </>
         ) : (
           <Route path="*" element={<Login onLogin={handleLogin} />} />
         )}
+        <Route path="knowledge" element={<KnowledgeBaseExplorer />} />
       </Routes>
       <Toaster />
     </Router>
