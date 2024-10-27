@@ -28,7 +28,7 @@ export default function DocumentUpload() {
       formData.append('companyId', companyId)
 
       try {
-        const response = await fetch(`${URL_BASE}/documents/upload`, {
+        const response = await fetch(`${URL_BASE}documents/upload`, {
           method: 'POST',
           body: formData,
         })

@@ -33,7 +33,7 @@ export default function CreateCompany() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${URL_BASE}/companies/create`, {
+      const response = await fetch(`${URL_BASE}companies/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
