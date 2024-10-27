@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { useToast } from "../../hooks/use-toast"
 import { Loader2 } from 'lucide-react'
+const URL_BASE = import.meta.env.VITE_API_URL
 
 export default function CreateCompany() {
   const [formData, setFormData] = useState({
@@ -32,7 +33,7 @@ export default function CreateCompany() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/companies/create', {
+      const response = await fetch(`${URL_BASE}/companies/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

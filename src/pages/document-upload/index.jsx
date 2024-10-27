@@ -5,11 +5,12 @@ import { Progress } from "@/components/ui/progress"
 import { useToast } from "../../hooks/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useNavigate } from 'react-router-dom'
+const URL_BASE = import.meta.env.VITE_API_URL
 
 export default function DocumentUpload() {
   const navigate = useNavigate()
   const [uploading, setUploading] = useState(false)
-  const {companyId} = localStorage.getItem('userData')? JSON.parse(localStorage.getItem('userData')) : null
+  const { companyId } = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
@@ -24,10 +25,10 @@ export default function DocumentUpload() {
       const file = files[i]
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('companyId', companyId)  
+      formData.append('companyId', companyId)
 
       try {
-        const response = await fetch('http://localhost:5000/api/documents/upload', {
+        const response = await fetch(`${URL_BASE}/documents/upload`, {
           method: 'POST',
           body: formData,
         })
@@ -36,7 +37,7 @@ export default function DocumentUpload() {
           const result = await response.json()
           setUploadedFiles(prev => [...prev, result])
           setUploadProgress((i + 1) / files.length * 100)
-          
+
           toast({
             title: "Documento subido exitosamente",
             description: `${file.name} ha sido subido correctamente.`,
@@ -84,12 +85,12 @@ export default function DocumentUpload() {
               <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Haz clic para subir</span> o arrastra y suelta</p>
               <p className="text-xs text-gray-500">PDF, DOC, DOCX, TXT (MAX. 10MB)</p>
             </div>
-            <input 
-              id="dropzone-file" 
-              type="file" 
-              className="hidden" 
-              multiple 
-              onChange={handleFileUpload} 
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              multiple
+              onChange={handleFileUpload}
               accept=".pdf,.doc,.docx,.txt"
               aria-label="Seleccionar archivos para subir"
             />
@@ -111,8 +112,8 @@ export default function DocumentUpload() {
             </ul>
           </div>
         )}
-        <Button 
-          className="mt-4 w-full" 
+        <Button
+          className="mt-4 w-full"
           onClick={() => document.getElementById('dropzone-file').click()}
           disabled={uploading}
         >
