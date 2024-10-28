@@ -107,7 +107,7 @@ export default function UsersView() {
 
             if (response.succes) {
                 // Agregar el usuario recién creado a la lista de usuarios
-                const updatedUsers = [...users, {  id: response.data.id, name: response.data.name, lastname: response.data.lastname, email: response.data.email, active: response.data.active }]
+                const updatedUsers = [...users, { id: response.data.id, name: response.data.name, lastname: response.data.lastname, email: response.data.email, active: response.data.active }]
                 setUsers(updatedUsers)
                 // Cerrar el diálogo y limpiar el formulario
                 setIsCreateDialogOpen(false)
@@ -138,14 +138,25 @@ export default function UsersView() {
         setIsEditDialogOpen(true)
     }
 
-    const handleUpdateUser = () => {
-        const updatedUsers = users.map(u => u.id === editingUser.id ? editingUser : u)
-        setUsers(updatedUsers)
-        setIsEditDialogOpen(false)
-        toast({
-            title: "Usuario actualizado",
-            description: "La información del usuario ha sido actualizada exitosamente.",
-        })
+    const handleUpdateUser = async () => {
+        try {
+            await apiRequest(`users/update/${editingUser.id}`, 'PUT', editingUser)
+
+            const updatedUsers = users.map(u => u.id === editingUser.id ? editingUser : u)
+            setUsers(updatedUsers)
+            setIsEditDialogOpen(false)
+            toast({
+                title: "Usuario actualizado",
+                description: "La información del usuario ha sido actualizada exitosamente.",
+            })
+        } catch (error) {
+            console.error('Error al actualizar el usuario:', error)
+            toast({
+                title: "Error",
+                description: "Hubo un problema al actualizar la información del usuario.",
+                status: "error"
+            })
+        }
     }
 
     const handleChangePassword = (userId) => {
@@ -153,7 +164,7 @@ export default function UsersView() {
         setIsChangePasswordDialogOpen(true)
     }
 
-    const handleUpdatePassword = () => {
+    const handleUpdatePassword = async () => {
         if (newPassword.password !== newPassword.confirmPassword) {
             toast({
                 title: "Error",
@@ -162,19 +173,29 @@ export default function UsersView() {
             })
             return
         }
-        setIsChangePasswordDialogOpen(false)
-        setNewPassword({ password: '', confirmPassword: '' })
-        toast({
-            title: "Contraseña actualizada",
-            description: "La contraseña del usuario ha sido actualizada exitosamente.",
-        })
+        try {
+            await apiRequest('users/update-password', 'POST', { id: editingUser.id, password: newPassword.password })
+            setIsChangePasswordDialogOpen(false)
+            setNewPassword({ password: '', confirmPassword: '' })
+            toast({
+                title: "Contraseña actualizada",
+                description: "La contraseña del usuario ha sido actualizada exitosamente.",
+            })
+        } catch (error) {
+            console.error('Error al actualizar la contraseña:', error)
+            toast({
+                title: "Error",
+                description: "Hubo un problema al actualizar la contraseña del usuario.",
+                variant: "destructive",
+            })
+        }
     }
 
-    const filteredUsers = users?users.filter(user =>
+    const filteredUsers = users ? users.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.lastname.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    ): []
+    ) : []
 
     const handleGoBack = () => {
         navigate(-1)
@@ -361,8 +382,8 @@ export default function UsersView() {
                                 </Label>
                                 <Input
                                     id="edit-firstName"
-                                    value={editingUser.firstName}
-                                    onChange={(e) => setEditingUser({ ...editingUser, firstName: e.target.value })}
+                                    value={editingUser.name}
+                                    onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
                                     className="col-span-3"
                                 />
                             </div>
@@ -372,8 +393,8 @@ export default function UsersView() {
                                 </Label>
                                 <Input
                                     id="edit-lastName"
-                                    value={editingUser.lastName}
-                                    onChange={(e) => setEditingUser({ ...editingUser, lastName: e.target.value })}
+                                    value={editingUser.lastname}
+                                    onChange={(e) => setEditingUser({ ...editingUser, lastname: e.target.value })}
                                     className="col-span-3"
                                 />
                             </div>
