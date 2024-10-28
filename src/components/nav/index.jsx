@@ -50,7 +50,7 @@ function ProfileMenu({ handleLogout, user }) {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-primary-foreground/10">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatars/01.png" alt="@usuario" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarFallback>{user.name.split('')[0].toUpperCase()}{user.lastname.split('')[0].toUpperCase()} </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
