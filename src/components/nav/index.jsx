@@ -17,13 +17,13 @@ import { Badge } from "@/components/ui/badge"
 import { useNavigate } from 'react-router-dom'
 
 
-export default function NavHeader({ handleLogout }) {
+export default function NavHeader({ handleLogout, user }) {
   return (
     <header className="bg-primary text-primary-foreground border-b border-primary/10">
       <div className="container mx-auto px-4 py-2 flex justify-end items-center">
         <div className="flex items-center justify-end space-x-4">
           <NotificationButton />
-          <ProfileMenu handleLogout={handleLogout} />
+          <ProfileMenu handleLogout={handleLogout} user={user} />
         </div>
       </div>
     </header>
@@ -42,7 +42,7 @@ function NotificationButton() {
   )
 }
 
-function ProfileMenu({ handleLogout }) {
+function ProfileMenu({ handleLogout, user }) {
 
   return (
     <DropdownMenu>
@@ -57,9 +57,9 @@ function ProfileMenu({ handleLogout }) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">John Doe</p>
+            <p className="text-sm font-medium leading-none"> {user.name} {user.lastname}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              john.doe@example.com
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>

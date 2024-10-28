@@ -65,7 +65,7 @@ function App() {
       <Routes>
         {user ? (
           <>
-            <Route path="/" element={<AuthenticatedLayout handleLogout={handleLogout} />}>
+            <Route path="/" element={<AuthenticatedLayout handleLogout={handleLogout} user={user} />}>
               <Route index element={<Navigate to="/documents" replace />} />
               <Route path="documents" element={<DocumentUpload />} />
               <Route path="files" element={<Documents />} />
@@ -77,7 +77,7 @@ function App() {
             </Route>
 
 
-            <Route path="/" element={<AuthenticatedLayoutAdmin handleLogout={handleLogout} />}>
+            <Route path="/" element={<AuthenticatedLayoutAdmin handleLogout={handleLogout} user={user} />}>
               <Route path="admin" element={<ConfigCompany />} />
               <Route path="admin/create" element={<CreateCompany />} />
               <Route path="admin/:companyId/users" element={<UsersCompany />} />
