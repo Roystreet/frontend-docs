@@ -47,7 +47,7 @@ export default function LoginPage({ onLogin }) {
             setIsLoading(true)
             try {
                 // Realizar solicitud a la API de login
-                const response = await apiRequest('/users/login', 'POST', { email, password })
+                const response = await apiRequest('users/login', 'POST', { email, password })
                 if (response.token) {
                     localStorage.setItem('authToken', response.token)
                     localStorage.setItem('userData', JSON.stringify(response.data)) // Guardar datos de usuario
