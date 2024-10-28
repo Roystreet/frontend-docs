@@ -2,12 +2,12 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import NavAdmin from "../nav-admin";
 
-const AuthenticatedLayoutAdmin = () => {
+const AuthenticatedLayoutAdmin = ({ handleLogout }) => {
     return (
         <>
             <div className="flex h-screen">
                 <div className="flex-1 ">
-                    <NavAdmin />
+                    <NavAdmin handleLogout={handleLogout} />
                     <div className='pl-2'>
                         <Outlet className="" />
 

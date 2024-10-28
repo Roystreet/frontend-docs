@@ -3,16 +3,7 @@ import { LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 
-const NavAdmin = () => {
-    const navigate = useNavigate()
-
-    const handleLogout = () => {
-        // Aquí iría la lógica para cerrar sesión
-        // Por ejemplo, limpiar el token de autenticación del localStorage
-        localStorage.removeItem('authToken')
-        // Redirigir al usuario a la página de inicio de sesión
-        navigate('/login')
-    }
+const NavAdmin = ({ handleLogout }) => {
 
     return (
         <nav className="bg-primary text-primary-foreground shadow-md">

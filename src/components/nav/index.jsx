@@ -14,14 +14,16 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { useNavigate } from 'react-router-dom'
 
-export default function NavHeader() {
+
+export default function NavHeader({ handleLogout }) {
   return (
     <header className="bg-primary text-primary-foreground border-b border-primary/10">
       <div className="container mx-auto px-4 py-2 flex justify-end items-center">
         <div className="flex items-center justify-end space-x-4">
           <NotificationButton />
-          <ProfileMenu />
+          <ProfileMenu handleLogout={handleLogout} />
         </div>
       </div>
     </header>
@@ -40,7 +42,8 @@ function NotificationButton() {
   )
 }
 
-function ProfileMenu() {
+function ProfileMenu({ handleLogout }) {
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -65,7 +68,7 @@ function ProfileMenu() {
           <User className="mr-2 h-4 w-4" />
           <span>Perfil</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Cerrar sesión</span>
         </DropdownMenuItem>

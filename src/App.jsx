@@ -57,6 +57,7 @@ function App() {
     localStorage.removeItem('userData')
     setUser(null)
     setIsAdmin(false)
+    navigate('/login')
   }
 
   return (
@@ -64,7 +65,7 @@ function App() {
       <Routes>
         {user ? (
           <>
-            <Route path="/" element={<AuthenticatedLayout onLogout={handleLogout} />}>
+            <Route path="/" element={<AuthenticatedLayout handleLogout={handleLogout} />}>
               <Route index element={<Navigate to="/documents" replace />} />
               <Route path="documents" element={<DocumentUpload />} />
               <Route path="files" element={<Documents />} />
@@ -75,13 +76,13 @@ function App() {
               <Route path="*" element={<Navigate to="/documents" replace />} />
             </Route>
 
-            
-              <Route path="/" element={<AuthenticatedLayoutAdmin onLogout={handleLogout} />}>
-                <Route path="admin" element={<ConfigCompany />} />
-                <Route path="admin/create" element={<CreateCompany />} />
-                <Route path="admin/:companyId/users" element={<UsersCompany />} />
-              </Route>
-            
+
+            <Route path="/" element={<AuthenticatedLayoutAdmin handleLogout={handleLogout} />}>
+              <Route path="admin" element={<ConfigCompany />} />
+              <Route path="admin/create" element={<CreateCompany />} />
+              <Route path="admin/:companyId/users" element={<UsersCompany />} />
+            </Route>
+
           </>
         ) : (
           <Route path="*" element={<Login onLogin={handleLogin} />} />
