@@ -1,44 +1,45 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Send, Bot, User, FlaskConical } from 'lucide-react'
-import { useParams } from 'react-router-dom'
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Skeleton } from "@/components/ui/skeleton"
-const baseUrl = import.meta.env.VITE_API_URL; 
-import apiRequest from "../../helper/api"
-
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Bot, User, FlaskConical } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import ReactMarkdown from 'react-markdown'; // Importa react-markdown
+import remarkBreaks from 'remark-breaks'; // Importa remark-breaks
+const baseUrl = import.meta.env.VITE_API_URL;
+import apiRequest from "../../helper/api";
 
 export default function ChatTest() {
-    const [messages, setMessages] = useState([])
-    const [inputMessage, setInputMessage] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [streamingMessage, setStreamingMessage] = useState('')
-    const messagesEndRef = useRef(null)
-    const { documentId } = useParams()
-    const [documents, setDocuments] = useState([])   
+    const [messages, setMessages] = useState([]);
+    const [inputMessage, setInputMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [streamingMessage, setStreamingMessage] = useState('');
+    const messagesEndRef = useRef(null);
+    const { documentId } = useParams();
+    const [documents, setDocuments] = useState([]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
-    useEffect(scrollToBottom, [messages, streamingMessage])
+    useEffect(scrollToBottom, [messages, streamingMessage]);
 
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const data = await apiRequest(`documents/${documentId}`, 'GET', null)
-                setDocuments(data)
+                const data = await apiRequest(`documents/${documentId}`, 'GET', null);
+                setDocuments(data);
             } catch (error) {
-                console.error('Error al obtener los documentos:', error)
+                console.error('Error al obtener los documentos:', error);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
-        fetchDocuments()
-    }, [])
+        };
+        fetchDocuments();
+    }, [documentId]);
 
     const typewriterEffect = (text, delay = 20) => {
         return new Promise((resolve) => {
@@ -56,19 +57,19 @@ export default function ChatTest() {
     };
 
     const handleSendMessage = async (e) => {
-        e.preventDefault()
-        if (inputMessage.trim() === '') return
+        e.preventDefault();
+        if (inputMessage.trim() === '') return;
 
         const newUserMessage = {
             id: Date.now(),
             text: inputMessage,
             sender: 'user'
-        }
+        };
 
-        setMessages(prevMessages => [...prevMessages, newUserMessage])
-        setInputMessage('')
-        setLoading(true)
-        setStreamingMessage('')
+        setMessages(prevMessages => [...prevMessages, newUserMessage]);
+        setInputMessage('');
+        setLoading(true);
+        setStreamingMessage('');
 
         try {
             const response = await fetch(`${baseUrl}documents/query`, {
@@ -80,28 +81,20 @@ export default function ChatTest() {
                     query: inputMessage,
                     documentId: documentId
                 })
-            })
+            });
 
             if (response.ok) {
-                const reader = response.body.getReader()
-                const decoder = new TextDecoder()
-                let fullResponse = ''
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
 
                 while (true) {
-                    const { done, value } = await reader.read()
-                    if (done) break
-
-                    const chunk = decoder.decode(value)
-                    const lines = chunk.split('\n')
-                    
-                    for (const line of lines) {
-                        if (line.startsWith('data: ')) {
-                            setLoading(false)
-                            const data = line.slice(6)
-                            await typewriterEffect(data)
-                            fullResponse += data
-                        }
-                    }
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    setLoading(false)
+                    const chunk = decoder.decode(value);
+                    fullResponse += chunk;
+                    await typewriterEffect(chunk);
                 }
 
                 setMessages(prevMessages => [
@@ -111,9 +104,9 @@ export default function ChatTest() {
                         text: fullResponse,
                         sender: 'system'
                     }
-                ])
+                ]);
             } else {
-                console.error('Error al obtener respuesta de la API')
+                console.error('Error al obtener respuesta de la API');
                 setMessages(prevMessages => [
                     ...prevMessages,
                     {
@@ -121,10 +114,10 @@ export default function ChatTest() {
                         text: "Lo siento, ha ocurrido un error al procesar tu consulta.",
                         sender: 'system'
                     }
-                ])
+                ]);
             }
         } catch (error) {
-            console.error('Error de conexión:', error)
+            console.error('Error de conexión:', error);
             setMessages(prevMessages => [
                 ...prevMessages,
                 {
@@ -132,12 +125,12 @@ export default function ChatTest() {
                     text: "Lo siento, ha ocurrido un error de conexión.",
                     sender: 'system'
                 }
-            ])
+            ]);
         } finally {
-            setLoading(false)
-            setStreamingMessage('')
+            setLoading(false);
+            setStreamingMessage('');
         }
-    }
+    };
 
     const BotMessageSkeleton = () => (
         <div className="mb-4 flex justify-start items-start">
@@ -152,12 +145,15 @@ export default function ChatTest() {
                 <Skeleton className="h-4 w-[150px]" />
             </div>
         </div>
-    )
+    );
 
     return (
         <Card className="flex flex-col h-[calc(100vh-5rem)] m-4">
             <CardHeader className="bg-primary text-primary-foreground py-2">
-                <CardTitle className="text-xl font-bold flex gap-2 items-center"><FlaskConical />{documents.name}</CardTitle>
+                <CardTitle className="text-xl font-bold flex gap-2 items-center">
+                    <FlaskConical />
+                    {documents.name}
+                </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
                 <ScrollArea className="h-full">
@@ -175,13 +171,24 @@ export default function ChatTest() {
                                     </Avatar>
                                 )}
                                 <div
-                                    className={`p-2 rounded-lg max-w-[80%] ${
-                                        message.sender === 'user'
-                                            ? 'bg-primary text-primary-foreground'
-                                            : 'bg-secondary text-secondary-foreground'
-                                    }`}
+                                    className={`p-2 rounded-lg max-w-[80%] ${message.sender === 'user'
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'bg-secondary text-secondary-foreground'
+                                        }`}
                                 >
-                                    {message.text}
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkBreaks]}
+                                        components={{
+                                            h1: ({ node, ...props }) => <h1 className="text-2xl font-bold" {...props} />,
+                                            h2: ({ node, ...props }) => <h2 className="text-xl font-semibold" {...props} />,
+                                            p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                                            strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+                                            li: ({ node, ...props }) => <li className="list-disc ml-5" {...props} />,
+                                            // Agrega más personalizaciones según sea necesario
+                                        }}
+                                    >
+                                        {message.text}
+                                    </ReactMarkdown>
                                 </div>
                                 {message.sender === 'user' && (
                                     <Avatar className="ml-2">
@@ -201,7 +208,19 @@ export default function ChatTest() {
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="p-2 rounded-lg max-w-[80%] bg-secondary text-secondary-foreground">
-                                    {streamingMessage}
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkBreaks]}
+                                        components={{
+                                            h1: ({ node, ...props }) => <h1 className="text-2xl font-bold" {...props} />,
+                                            h2: ({ node, ...props }) => <h2 className="text-xl font-semibold" {...props} />,
+                                            p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                                            strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+                                            li: ({ node, ...props }) => <li className="list-disc ml-5" {...props} />,
+                                            // Agrega más personalizaciones según sea necesario
+                                        }}
+                                    >
+                                        {streamingMessage}
+                                    </ReactMarkdown>
                                     <span className="inline-block w-1 h-4 bg-primary-foreground ml-1 animate-blink"></span>
                                 </div>
                             </div>
